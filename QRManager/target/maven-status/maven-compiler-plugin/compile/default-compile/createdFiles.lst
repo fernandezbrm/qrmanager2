@@ -1,0 +1,5 @@
+qrmanager\dev\SerialPortListener.class
+qrmanager\dev\QRManager.class
+qrmanager\dev\DigitalSerialIOImpl.class
+qrmanager\dev\DigitalIOInterface.class
+qrmanager\dev\RxTxSerialPort.class
