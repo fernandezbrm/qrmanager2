@@ -1,0 +1,8 @@
+{
+  "qrManagers": [
+  	{"name": "Carril 1", "portName": "COM3", "speed": 115,200, "doChannel": 2},
+  	{"name": "Carril 2", "portName": "COM6", "speed": 115,200, "doChannel": 3},
+  	{"name": "Carril 3", "portName": "COM8", "speed": 115,200, "doChannel": 4},
+  ],
+  "digitalOutput": {"portName": "COM7", "speed": 9600}
+}

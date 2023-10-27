@@ -1,0 +1,68 @@
+/**
+ * 
+ */
+package qrmanager.dev;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader; 
+import java.io.IOException;
+import java.util.Iterator; 
+import java.util.Map; 
+  
+
+
+import java.util.Map.Entry;
+
+import org.json.simple.JSONArray; 
+import org.json.simple.JSONObject; 
+import org.json.simple.parser.*; 
+
+/**
+ * @author Roberto Fernandez
+ *
+ */
+public class ReadConfig {
+	
+	private static final int MAX_ELEMS = 50;
+	
+	public QRManagerDTO[] getQrManagers(String configFilePath) throws FileNotFoundException, IOException, ParseException {
+		// parsing file "JSONExample.json"
+		QRManagerDTO[] myDTO = new QRManagerDTO[MAX_ELEMS];
+		
+        Object obj = new JSONParser().parse(new FileReader(configFilePath)); 
+          
+        // type casting obj to JSONObject 
+        JSONObject jo = (JSONObject) obj; 
+        
+        // getting qrManagers
+        JSONArray ja = (JSONArray) jo.get("qrManagers"); 
+          
+        // iterating qrManagers
+        Iterator itr2 = ja.iterator(); 
+          
+        while (itr2.hasNext())  
+        { 
+            Iterator itr1 = ((Map) itr2.next()).entrySet().iterator(); 
+            QRManagerDTO dto = new QRManagerDTO();
+            while (itr1.hasNext()) { 
+                Map.Entry pair = (Entry) itr1.next(); 
+                System.out.println(pair.getKey() + " : " + pair.getValue());
+                
+                if (pair.getKey().toString().equalsIgnoreCase("name")) {
+                	dto.setName(pair.getKey().toString());
+                }
+                else if (pair.getKey().toString().equalsIgnoreCase("portName")) {
+                    dto.setPortName(pair.getKey().toString());
+                }
+                else if (pair.getKey().toString().equalsIgnoreCase("speed")) {
+                    dto.setSpeed(Integer.parseInt(pair.getKey().toString()));
+                }
+                else if (pair.getKey().toString().equalsIgnoreCase("doChannel")) {
+                	dto.setDoChannel(Integer.parseInt(pair.getKey().toString()));
+                }
+            } 
+        }
+		return myDTO; 
+        
+	}
+}

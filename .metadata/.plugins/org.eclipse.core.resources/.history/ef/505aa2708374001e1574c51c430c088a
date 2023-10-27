@@ -1,0 +1,46 @@
+/**
+ * 
+ */
+package qrmanager.dev;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader; 
+import java.io.IOException;
+import java.util.Iterator; 
+import java.util.Map; 
+  
+
+
+import org.json.simple.JSONArray; 
+import org.json.simple.JSONObject; 
+import org.json.simple.parser.*; 
+
+/**
+ * @author Roberto Fernandez
+ *
+ */
+public class ReadConfig {
+	public void getConfig(String configFilePath) throws FileNotFoundException, IOException, ParseException {
+		// parsing file "JSONExample.json" 
+        Object obj = new JSONParser().parse(new FileReader(configFilePath)); 
+          
+        // type casting obj to JSONObject 
+        JSONObject jo = (JSONObject) obj; 
+        
+        // getting qrManagers
+        JSONArray ja = (JSONArray) jo.get("qrManagers"); 
+          
+        // iterating phoneNumbers 
+        Iterator itr2 = ja.iterator(); 
+          
+        while (itr2.hasNext())  
+        { 
+            itr1 = ((Map) itr2.next()).entrySet().iterator(); 
+            while (itr1.hasNext()) { 
+                Map.Entry pair = itr1.next(); 
+                System.out.println(pair.getKey() + " : " + pair.getValue()); 
+            } 
+        } 
+        
+	}
+}

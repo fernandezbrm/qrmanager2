@@ -13,6 +13,19 @@
     "javaRuntime": true
   },
   {
+    "symbolicName": "junit-4.10",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "e4f1766ce7404a08f45d859fb9c226fc9e41a861",
+    "jarFileModificationDate": "2023-10-26T23:04:08.330-05:00",
+    "location": "C:\\Users\\Roberto Fernandez\\.m2\\repository\\junit\\junit\\4.10\\junit-4.10.jar",
+    "javaRuntime": false
+  },
+  {
     "symbolicName": "jre",
     "version": {
       "major": 1,
@@ -102,6 +115,19 @@
     "jarFileModificationDate": "2020-07-28T03:41:42-05:00",
     "location": "C:\\Program Files\\Zulu\\zulu-8\\jre\\lib\\ext\\zipfs.jar",
     "javaRuntime": true
+  },
+  {
+    "symbolicName": "org.hamcrest.hamcrest-core",
+    "version": {
+      "major": 1,
+      "minor": 1,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "860340562250678d1a344907ac75754e259cdb14",
+    "jarFileModificationDate": "2023-10-26T23:04:08.208-05:00",
+    "location": "C:\\Users\\Roberto Fernandez\\.m2\\repository\\org\\hamcrest\\hamcrest-core\\1.1\\hamcrest-core-1.1.jar",
+    "javaRuntime": false
   },
   {
     "symbolicName": "jre",
@@ -229,8 +255,21 @@
       "qualifier": ""
     },
     "jarFileFingerprint": "4f7501841eb130c1f5a5a2abf5ee20c1210d44e2",
-    "jarFileModificationDate": "2023-10-25T23:00:44.176-05:00",
+    "jarFileModificationDate": "2023-10-26T22:05:21.225-05:00",
     "location": "C:\\git\\qrmanager2\\mfz-rxtx-2.2-20081207-win-x64\\RXTXcomm.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "com.googlecode.json-simple",
+    "version": {
+      "major": 1,
+      "minor": 1,
+      "micro": 1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "c9ad4a0850ab676c5c64461a05ca524cdfff59f1",
+    "jarFileModificationDate": "2023-10-26T23:04:08.153-05:00",
+    "location": "C:\\Users\\Roberto Fernandez\\.m2\\repository\\com\\googlecode\\json-simple\\json-simple\\1.1.1\\json-simple-1.1.1.jar",
     "javaRuntime": false
   },
   {

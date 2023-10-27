@@ -30,13 +30,13 @@ public class DigitalSerialIOImpl implements DigitalIOInterface, SerialPortListen
 	}
 
 	/** setOutputOn */
-	public synchronized int setOutputOn(int channel) {
+	public synchronized int setOutputOn(String name, int channel) {
 		// TODO Auto-generated method stub
 		String cmdString;
 		
 		// Add output channel to string
 		cmdString = Integer.toString(channel)+"-1;";
-		System.out.println(">> setOutputOn = " + cmdString);
+		System.out.println(name + ": setOutputOn = " + cmdString);
 		// Get byte array from string and send it out to serial USB to 
 		// digital output controller
 		mySerialPort.sendBytes(cmdString.getBytes());
@@ -44,13 +44,13 @@ public class DigitalSerialIOImpl implements DigitalIOInterface, SerialPortListen
 	}
 
 	/** setOutputOff */
-	public synchronized int setOutputOff(int channel) {
+	public synchronized int setOutputOff(String name, int channel) {
 		// TODO Auto-generated method stub
 		String cmdString;
 		
 		// Add output channel to string
 		cmdString = Integer.toString(channel)+"-0;";
-		System.out.println(">> setOutputOff = " + cmdString);
+		System.out.println(name + ": setOutputOff = " + cmdString);
 		// Get byte array from string and send it out to serial USB to 
 		// digital output controller
 		mySerialPort.sendBytes(cmdString.getBytes());

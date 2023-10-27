@@ -1,0 +1,9 @@
+{
+  qrManagers: [
+  	{"name": "Carril 1", "portName": "COM3", "speed": 115,200, "doChannel": 2},
+  	{"name": "Carril 2", "portName": "COM3", "speed": 115,200, "doChannel": 2},
+  	{"name": "Carril 3", "portName": "COM3", "speed": 115,200, "doChannel": 2},
+  ],
+  digitalOutput: {
+  }
+}
