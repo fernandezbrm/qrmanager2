@@ -1,6 +1,8 @@
 qrmanager\dev\QRManagerDTO.class
 qrmanager\dev\SerialPortListener.class
+qrmanager\dev\Constants.class
 qrmanager\dev\DigitalSerialIOImpl.class
+qrmanager\dev\DoDTO.class
 qrmanager\dev\RxTxSerialPort.class
 qrmanager\dev\ReadConfig.class
 qrmanager\dev\QRManager.class

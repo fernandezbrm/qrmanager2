@@ -21,6 +21,7 @@ import org.json.simple.parser.*;
  */
 public class ReadConfig {
 	private static final String QRMANAGERS_ELEM = "qrManagers";
+	private static final String DIGITAL_OUTPUT_ELEM = "digitalOutput";
 	private static final String NAME_ELEM = "name";
 	private static final String PORT_NAME_ELEM = "portName";
 	private static final String SPEED_ELEM = "speed";
@@ -66,5 +67,33 @@ public class ReadConfig {
         }
         
 		return myDTO; 
+	}
+	
+	public DoDTO getDigitalOutput(String configFilePath) throws FileNotFoundException, IOException, ParseException {
+		// parsing file "JSONExample.json"
+		DoDTO dto = new DoDTO();
+		
+        Object obj = new JSONParser().parse(new FileReader(configFilePath)); 
+          
+        // type casting obj to JSONObject 
+        JSONObject jo = (JSONObject) obj; 
+        
+        // getting digitalOutput element
+        Map doOutput = ((Map)jo.get(DIGITAL_OUTPUT_ELEM)); 
+          
+        // iterating digitaloutput element nested elements
+        Iterator<Map.Entry> itr1 = doOutput.entrySet().iterator();           
+        
+        while (itr1.hasNext()) { 
+                Map.Entry pair = (Entry) itr1.next(); 
+                
+                if (pair.getKey().toString().equalsIgnoreCase(PORT_NAME_ELEM)) {
+                    dto.setPortName(pair.getValue().toString());
+                }
+                else if (pair.getKey().toString().equalsIgnoreCase(SPEED_ELEM)) {
+                    dto.setSpeed(Integer.parseInt(pair.getValue().toString()));
+                }
+        }
+        return dto;
 	}
 }

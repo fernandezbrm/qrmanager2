@@ -17,7 +17,10 @@ import java.util.*;
 public class QRManager implements SerialPortListener{
 	// Class attributes
 	private static ReadConfig myReadConfig = new ReadConfig();
+	// By default use constant path, it can be overriden by CLI argument
+	private static String configFilePath = Constants.CONF_FILE_PATH_DEFAULT;
 	private static List<QRManagerDTO> myQRMDTO = new ArrayList<QRManagerDTO>();
+	private static DigitalSerialIOImpl dSerialImpl;
 	// Instance attributes
 	private RxTxSerialPort myQRReader;
 	private DigitalIOInterface myDio;
@@ -26,13 +29,13 @@ public class QRManager implements SerialPortListener{
 
 	/** Constructor 
 	 * @throws Exception */
-	QRManager(String name, String portName, int speed, int doChannel) throws Exception {
+	QRManager(String name, String portName, int speed, int doChannel, DigitalIOInterface dSerialIO) throws Exception {
 		// TODO Auto-generated method stub
 		// System.out.println("QRManager: name = " + name + ", portName = " + portName + ", speed = " + speed + ", doChannel = " + doChannel);
 		
 		/** Create RxTxReaderSerialPort */
 		setMyQRReader(new RxTxSerialPort(portName, speed, this));
-		System.out.println("QR reader serial port interface created");
+		// System.out.println("QR reader serial port interface created");
 		
 		// Save the digital output channel bound to this QRManager instance
 		this.doChannel = doChannel;
@@ -40,9 +43,9 @@ public class QRManager implements SerialPortListener{
 		// Name to identify this QRManager instance
 		this.myName = name;
 		
-		/** Get digital output interface singleton instance */
-		setMyDio(DigitalSerialIOImpl.getInstance());
-		System.out.println("Digital output interface singleton gotten");
+		/** Set digital output interface singleton instance reference*/
+		setMyDio(dSerialIO);
+		// System.out.println("Digital output interface singleton gotten");
 	}
 
 	/** This listener method is invoked by our QRReaderSerialPort
@@ -84,12 +87,22 @@ public class QRManager implements SerialPortListener{
 	
 	/**
 	 * @param args
+	 * @throws Exception 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
+	    // Read command line arguments
+		System.out.println("Argument count: " + args.length);
+	    for (int i = 0; i < args.length; i++) {
+	        System.out.println("Argument " + i + ": " + args[i]);
+	        if (0 == i) {
+	        	configFilePath = args[i];
+	        }
+	    }
+	    
 		// Read configuration file
 		try {
 			// Read configuration file
-			myQRMDTO = myReadConfig.getQrManagers("../qrmanager_conf.json");
+			myQRMDTO = myReadConfig.getQrManagers(configFilePath);
 		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -103,6 +116,10 @@ public class QRManager implements SerialPortListener{
 			e1.printStackTrace();
 			return;
 		}
+
+		// Get DigitalSerialIOImpl singleton instance to be used 
+		// by all QRManager instances
+		dSerialImpl = DigitalSerialIOImpl.getInstance(configFilePath);
 		
 		for (int i = 0; i < myQRMDTO.size(); i++) {
 			try {
@@ -110,7 +127,9 @@ public class QRManager implements SerialPortListener{
 				QRManager qrm = new QRManager(myQRMDTO.get(i).getName(), 
 											  myQRMDTO.get(i).getPortName(), 
 											  myQRMDTO.get(i).getSpeed(), 
-											  myQRMDTO.get(i).getDoChannel());
+											  myQRMDTO.get(i).getDoChannel(), 
+											  dSerialImpl);
+				Thread.sleep(1000);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

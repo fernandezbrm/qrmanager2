@@ -12,14 +12,21 @@ package qrmanager.dev;
  *
  */
 public class DigitalSerialIOImpl implements DigitalIOInterface, SerialPortListener{
+	// Class attributes
+	private static DoDTO dto; 
 	private static DigitalSerialIOImpl myInstance = null;
-	private static String portName = "COM7"; // TODO: Take from configuration map
-	private static int speed = 9600; // TODO: Take from configuration map
+	// Instance attributes
 	private RxTxSerialPort mySerialPort;
 	
-	public static DigitalSerialIOImpl getInstance() throws Exception {
+	public static DigitalSerialIOImpl getInstance(String configFilePath) throws Exception {
 		if (myInstance == null) {
-			myInstance = new DigitalSerialIOImpl(portName, speed);
+			// Read digital output configuration for USB to DO board
+			// and use it to instantiate singleton DigitalSerialIOImpl accordingly
+			ReadConfig conf = new ReadConfig();
+			dto = conf.getDigitalOutput(configFilePath);
+			myInstance = new DigitalSerialIOImpl(dto.getPortName(), dto.getSpeed());
+			System.out.println("DigitalSerialIOImpl singleton instance created: portName = " + dto.getPortName() + 
+					            ", speed = " + dto.getSpeed());
 		}
 		return myInstance;
 	}
