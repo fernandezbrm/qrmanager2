@@ -16,13 +16,33 @@
     	</snapshots>
 	</repository>
 </repositories>
-
+  <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <name>Central Repository</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
 <dependencies>
     <!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
 	<dependency>
     	<groupId>com.googlecode.json-simple</groupId>
     	<artifactId>json-simple</artifactId>
     	<version>1.1.1</version>
+	</dependency>
+	<dependency>
+    	<groupId>gnu.rxtx</groupId>
+    	<artifactId>sample</artifactId>
+    	<version>1.0</version>
+    	<scope>system</scope>
+    	<systemPath>C:\Program Files\Java\jre1.8.0_202\lib\ext\RXTXcomm.jar</systemPath>
 	</dependency>
 </dependencies>
      
