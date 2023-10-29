@@ -12,6 +12,7 @@ public class QRManagerDTO {
 	private String portName;
 	private int speed;
 	private int doChannel;
+	private int pulseLengthMs;
 	
 	public void setName(String name){
 		this.name = name;
@@ -36,5 +37,11 @@ public class QRManagerDTO {
 	}
 	public int getDoChannel() {
 		return this.doChannel;
+	}
+	public void setPulseLengthMs(int pulseLengthMs){
+		this.pulseLengthMs = pulseLengthMs;
+	}
+	public int getpulseLenghtMs() {
+		return this.pulseLengthMs;
 	}
 }

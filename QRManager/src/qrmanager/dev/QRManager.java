@@ -25,23 +25,32 @@ public class QRManager implements SerialPortListener{
 	private RxTxSerialPort myQRReader;
 	private DigitalIOInterface myDio;
 	private int doChannel;
+	private int pulseLengthMs;
 	private String myName;
 
 	/** Constructor 
 	 * @throws Exception */
-	QRManager(String name, String portName, int speed, int doChannel, DigitalIOInterface dSerialIO) throws Exception {
+	QRManager(QRManagerDTO qrManagerDTO, DigitalIOInterface dSerialIO) throws Exception {
 		// TODO Auto-generated method stub
-		// System.out.println("QRManager: name = " + name + ", portName = " + portName + ", speed = " + speed + ", doChannel = " + doChannel);
+		/** System.out.println("QRManager: name = " + qrManagerDTO.getName() + 
+							", portName = " + qrManagerDTO.getPortName() + 
+							", speed = " + qrManagerDTO.getSpeed() + 
+							", doChannel = " + qrManagerDTO.getDoChannel() + 
+							" pulseLengthMs = " + qrManagerDTO.getpulseLenghtMs());
+		*/
 		
 		/** Create RxTxReaderSerialPort */
-		setMyQRReader(new RxTxSerialPort(portName, speed, this));
+		setMyQRReader(new RxTxSerialPort(qrManagerDTO.getPortName(), qrManagerDTO.getSpeed(), this));
 		// System.out.println("QR reader serial port interface created");
 		
 		// Save the digital output channel bound to this QRManager instance
-		this.doChannel = doChannel;
+		this.doChannel = qrManagerDTO.getDoChannel();
 		
 		// Name to identify this QRManager instance
-		this.myName = name;
+		this.myName = qrManagerDTO.getName();
+		
+		// Pulse length in milliseconds
+		this.pulseLengthMs = qrManagerDTO.getpulseLenghtMs();
 		
 		/** Set digital output interface singleton instance reference*/
 		setMyDio(dSerialIO);
@@ -61,7 +70,7 @@ public class QRManager implements SerialPortListener{
 		// in order to open lane barrier
 		this.getMyDio().setOutputOn(myName, doChannel); 
 		try {
-			Thread.sleep(500); // TODO: take from configuration
+			Thread.sleep(pulseLengthMs); 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -124,10 +133,7 @@ public class QRManager implements SerialPortListener{
 		for (int i = 0; i < myQRMDTO.size(); i++) {
 			try {
 				// Create QRManager instance based in configuration
-				QRManager qrm = new QRManager(myQRMDTO.get(i).getName(), 
-											  myQRMDTO.get(i).getPortName(), 
-											  myQRMDTO.get(i).getSpeed(), 
-											  myQRMDTO.get(i).getDoChannel(), 
+				QRManager qrm = new QRManager(myQRMDTO.get(i), 
 											  dSerialImpl);
 				Thread.sleep(1000);
 			} catch (Exception e) {

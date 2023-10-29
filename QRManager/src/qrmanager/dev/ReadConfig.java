@@ -26,6 +26,7 @@ public class ReadConfig {
 	private static final String PORT_NAME_ELEM = "portName";
 	private static final String SPEED_ELEM = "speed";
 	private static final String DOCHANNEL_ELEM = "doChannel";
+	private static final String PULSE_LENGTH_MS_ELEM = "pulseLengthMs";
 	
 	public List<QRManagerDTO> getQrManagers(String configFilePath) throws FileNotFoundException, IOException, ParseException {
 		// parsing file "JSONExample.json"
@@ -61,6 +62,9 @@ public class ReadConfig {
                 else if (pair.getKey().toString().equalsIgnoreCase(DOCHANNEL_ELEM)) {
                 	dto.setDoChannel(Integer.parseInt(pair.getValue().toString()));
                 }
+                else if (pair.getKey().toString().equalsIgnoreCase(PULSE_LENGTH_MS_ELEM)) {
+                	dto.setDoChannel(Integer.parseInt(pair.getValue().toString()));
+                }                
             } 
             // Add DTO instance to the list
             myDTO.add(dto);

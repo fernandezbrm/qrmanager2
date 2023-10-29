@@ -4,19 +4,22 @@
   		"name": "Carril 1", 
   		"portName": "COM3", 
   		"speed": 115200, 
-  		"doChannel": 2
+  		"doChannel": 2,
+		"pulseLengthMs": 500
   	},
   	{
   		"name": "Carril 2", 
   		"portName": "COM6", 
   		"speed": 115200, 
-  		"doChannel": 3
+  		"doChannel": 3,
+		"pulseLengthMs": 500
   	},
   	{
   		"name": "Carril 3", 
   		"portName": "COM8", 
   		"speed": 115200, 
-  		"doChannel": 4
+  		"doChannel": 4,
+		"pulseLengthMs": 500
   	}
   ],
   "digitalOutput": 
