@@ -6,7 +6,9 @@ package qrmanager.dev;
 import java.io.FileNotFoundException;
 import java.io.FileReader; 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator; 
+import java.util.List;
 import java.util.Map; 
 import java.util.Map.Entry;
 import java.util.*;
@@ -27,12 +29,13 @@ public class ReadConfig {
 	private static final String SPEED_ELEM = "speed";
 	private static final String DOCHANNEL_ELEM = "doChannel";
 	private static final String PULSE_LENGTH_MS_ELEM = "pulseLengthMs";
+	private static final String SCHEMA_ELEMENTS_ELEM = "schemaElements";
+	private static final String ELEMENT_ELEM = "element";
 	
 	public List<QRManagerDTO> getQrManagers(String configFilePath) throws FileNotFoundException, IOException, ParseException {
-		// parsing file "JSONExample.json"
 		List<QRManagerDTO> myDTO = new ArrayList<QRManagerDTO>();
 		
-        Object obj = new JSONParser().parse(new FileReader(configFilePath)); 
+        Object obj = new JSONParser().parse(new FileReader(configFilePath));
           
         // type casting obj to JSONObject 
         JSONObject jo = (JSONObject) obj; 
@@ -63,7 +66,7 @@ public class ReadConfig {
                 	dto.setDoChannel(Integer.parseInt(pair.getValue().toString()));
                 }
                 else if (pair.getKey().toString().equalsIgnoreCase(PULSE_LENGTH_MS_ELEM)) {
-                	dto.setDoChannel(Integer.parseInt(pair.getValue().toString()));
+                	dto.setPulseLengthMs(Integer.parseInt(pair.getValue().toString()));
                 }                
             } 
             // Add DTO instance to the list
@@ -99,5 +102,33 @@ public class ReadConfig {
                 }
         }
         return dto;
+	}
+	
+	public List<String> getSchemaValidator(String configFilePath) throws FileNotFoundException, IOException, ParseException {
+		List<String> elements = new ArrayList<String>(); 
+		
+        Object obj = new JSONParser().parse(new FileReader(configFilePath));
+        
+        // type casting obj to JSONObject 
+        JSONObject jo = (JSONObject) obj; 
+        
+        // getting qrManagers element
+        JSONArray ja = (JSONArray) jo.get(SCHEMA_ELEMENTS_ELEM); 
+          
+        // iterating schemaElements 
+        Iterator itr2 = ja.iterator(); 
+          
+        while (itr2.hasNext())  
+        { 
+            Iterator itr1 = ((Map) itr2.next()).entrySet().iterator();
+            while (itr1.hasNext()) { 
+                Map.Entry pair = (Entry) itr1.next(); 
+                
+                if (pair.getKey().toString().equalsIgnoreCase(ELEMENT_ELEM)) {
+                	elements.add(pair.getValue().toString());
+                }
+            } 
+        }    
+		return elements; 
 	}
 }

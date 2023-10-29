@@ -43,7 +43,8 @@ public class DigitalSerialIOImpl implements DigitalIOInterface, SerialPortListen
 		
 		// Add output channel to string
 		cmdString = Integer.toString(channel)+"-1;";
-		System.out.println(name + ": setOutputOn = " + cmdString);
+		//System.out.println(name + ": setOutputOn = " + cmdString);
+		
 		// Get byte array from string and send it out to serial USB to 
 		// digital output controller
 		mySerialPort.sendBytes(cmdString.getBytes());
@@ -57,15 +58,18 @@ public class DigitalSerialIOImpl implements DigitalIOInterface, SerialPortListen
 		
 		// Add output channel to string
 		cmdString = Integer.toString(channel)+"-0;";
-		System.out.println(name + ": setOutputOff = " + cmdString);
+		// System.out.println(name + ": setOutputOff = " + cmdString);
+		
 		// Get byte array from string and send it out to serial USB to 
 		// digital output controller
 		mySerialPort.sendBytes(cmdString.getBytes());
 		return 0;		
 	}
-	public void dataReceived(String qr) {
+	public void dataReceived(String reply) {
 		// TODO Auto-generated method stub
-		System.out.println(" <<<< DigitalSerialIOImpl:" + this + " serial read = " + qr);
+		if (!reply.contains("SUCCESS")) {
+			System.out.println(" <<<< DigitalSerialIOImpl ERROR:" + this + " serial read = " + reply);
+		}
 	}
 
 }

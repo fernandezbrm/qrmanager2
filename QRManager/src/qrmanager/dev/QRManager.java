@@ -21,6 +21,7 @@ public class QRManager implements SerialPortListener{
 	private static String configFilePath = Constants.CONF_FILE_PATH_DEFAULT;
 	private static List<QRManagerDTO> myQRMDTO = new ArrayList<QRManagerDTO>();
 	private static DigitalSerialIOImpl dSerialImpl;
+	private static List <String> schemaElements;
 	// Instance attributes
 	private RxTxSerialPort myQRReader;
 	private DigitalIOInterface myDio;
@@ -57,25 +58,37 @@ public class QRManager implements SerialPortListener{
 		// System.out.println("Digital output interface singleton gotten");
 	}
 
+	private boolean validateJsonSchema(String qr) {
+		// Validata that elements in schema present in read QR JSOn structure
+		for (String element: schemaElements) {
+			if (!qr.contains(element)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	/** This listener method is invoked by our QRReaderSerialPort
 	 *  instance when a new QR has been read from serial port 
 	 */
 	public void dataReceived(String qr) {
-		// TODO Auto-generated method stub
-		System.out.println(" <<<<" + this.myName + " qr read = " + qr);
-		
-		// Validate if QR matches Anahuac JSON structure
-		
-		// If QR valid, trigger momentary corresponding DO output
-		// in order to open lane barrier
-		this.getMyDio().setOutputOn(myName, doChannel); 
-		try {
-			Thread.sleep(pulseLengthMs); 
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		this.getMyDio().setOutputOff(myName, doChannel);
+		// Validate if QR matches schema JSON structure
+		if (validateJsonSchema(qr)) {
+			System.out.println(">>>> " + myName + " QR VALID = " + qr + " ACCESS GRANTED");
+			// If QR valid, trigger momentary corresponding DO output
+			// in order to open lane barrier
+			this.getMyDio().setOutputOn(myName, doChannel); 
+			try {
+				Thread.sleep(pulseLengthMs); 
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+			this.getMyDio().setOutputOff(myName, doChannel);
+		}
+		else {
+			System.out.println("<<<< " + myName + ": INVALID QR = " + qr+ " ACCESS DENIED!!!!");
+		}
 	}
 
 	public void setMyDio(DigitalIOInterface dio) {
@@ -126,10 +139,28 @@ public class QRManager implements SerialPortListener{
 			return;
 		}
 
+		// Read JSON schema validation elements from configuration
+		try {
+			// Read configuration file
+			schemaElements = myReadConfig.getSchemaValidator(configFilePath);
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return;
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return;
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return;
+		}		
+		
 		// Get DigitalSerialIOImpl singleton instance to be used 
 		// by all QRManager instances
 		dSerialImpl = DigitalSerialIOImpl.getInstance(configFilePath);
-		
+
 		for (int i = 0; i < myQRMDTO.size(); i++) {
 			try {
 				// Create QRManager instance based in configuration
@@ -145,7 +176,8 @@ public class QRManager implements SerialPortListener{
 								"name = " + myQRMDTO.get(i).getName() + 
 								", portName = " + myQRMDTO.get(i).getPortName() + 
 								", speed = " + myQRMDTO.get(i).getSpeed() +  
-								" and doChannel = " + myQRMDTO.get(i).getDoChannel() +  " created");
+								" doChannel = " + myQRMDTO.get(i).getDoChannel() +  
+								" pulseLengthMs = " + myQRMDTO.get(i).getpulseLenghtMs() + " created");
 		}
 	}
 }
