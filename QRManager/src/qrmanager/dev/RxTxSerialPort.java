@@ -18,12 +18,16 @@ import java.io.OutputStream;
  *
  */
 public class RxTxSerialPort implements Runnable {
+	// Class attributes
 	private static final int PORT_OPEN_TIMEOUT_MS = 2000;
 	private static final int ERROR = 0;
 	private static final int SUCCESS = 1;
+	// Instance attributes
 	private String portName;
 	private int speed;
 	private SerialPortListener serialPortListener;
+	private CommPortIdentifier portIdentifier;
+	private CommPort commPort;
 	private InputStream in;
 	private OutputStream out;
 
@@ -32,23 +36,29 @@ public class RxTxSerialPort implements Runnable {
 		setSpeed(speed);
 		setSerialPortListener(serialPortListener);
 		// Get streams to write and read serial port
-		connect();
-		// Launch thread to read QRs from reader via serial port
-		Thread thread = new Thread(this);
-		thread.start();
+		if (SUCCESS == connect()) {
+			// Launch thread to read data from serial port
+			Thread thread = new Thread(this);
+			thread.start();
+		}
+		else {
+			Exception e = new Exception();
+			throw(e);
+		}
 	}
 	
-	   void connect() throws Exception
+	   int connect() throws Exception
 	    {
-	        CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(getPortName());
+	        portIdentifier = CommPortIdentifier.getPortIdentifier(getPortName());
 	        if ( portIdentifier.isCurrentlyOwned() )
 	        {
 	            System.out.println("Error: Port " + getPortName() + " is currently in use");
+	            return ERROR;
 	        }
 	        else
 	        {
 	        	// Get CommPort for given portName, wait until specified timeout milliseconds
-	            CommPort commPort = portIdentifier.open(this.getClass().getName(), PORT_OPEN_TIMEOUT_MS);
+	            commPort = portIdentifier.open(this.getClass().getName(), PORT_OPEN_TIMEOUT_MS);
 	            
 	            if ( commPort instanceof SerialPort )
 	            {
@@ -61,9 +71,18 @@ public class RxTxSerialPort implements Runnable {
 	            else
 	            {
 	                System.out.println("Error: Only serial ports are handled by this example.");
+	                return ERROR;
 	            }
 	        }     
+	        return SUCCESS;
 	    }	
+	   
+	   void close() {
+		   commPort.close();
+		   portIdentifier = null;
+		   in = null;
+		   out = null;
+	   }
 	   
 	   // Send out a stream of byte out the serial port
 	   public int sendBytes(byte[] cmd) {
@@ -80,36 +99,42 @@ public class RxTxSerialPort implements Runnable {
 	// Thread run method
 	public void run() {
 		boolean exit = false;
+		// System.out.println("!!!!!!!!!!!!!!!!!!!Entering run() for " + getPortName());
+		
 		while (!exit) {
             byte[] buffer = new byte[1024];
             int len;
             try
             {
-            	// Simple state machine, start concatenating incoming data when len is not zero
-            	// until len is again zero
-            	StringBuffer data = new StringBuffer();
-            	len = 0;
-                while ((len = this.in.read(buffer)) > 0)
-                {
-                	// We got 1st group of data, append it to data
-                	data.append(new String(buffer,0,len, "UTF-8"));
-                    // System.out.println("<<<< Serial read = " + data);
-                    // Continue reading until len is zero again
-                    while ((len = this.in.read(buffer)) > 0) {
-                    	data.append(new StringBuffer(new String(buffer,0,len, "UTF-8")));
-                    	// System.out.println("<<<< Serial read = " + data);
-                    }
-                    // len is zero again, we got QR data, report it to registered QRReadListener
-                    getSerialPortListener().dataReceived(data.toString());
-                }
-                
+	            	// Simple state machine, start concatenating incoming data when len is not zero
+	            	// until len is again zero
+	            	StringBuffer data = new StringBuffer();
+	            	len = 0;
+	                while ((len = this.in.read(buffer)) > 0)
+	                {
+	                	// We got 1st group of data, append it to data
+	                	data.append(new String(buffer,0,len, "UTF-8"));
+	                    // System.out.println("<<<< Serial read = " + data);
+	                    // Continue reading until len is zero again
+	                    while ((len = this.in.read(buffer)) > 0) {
+	                    	data.append(new StringBuffer(new String(buffer,0,len, "UTF-8")));
+	                    	// System.out.println("<<<< Serial read = " + data);
+	                    }
+	                    // len is zero again, we got QR data, report it to registered QRReadListener
+	                    getSerialPortListener().dataReceived(data.toString());
+	                }
             }
             catch ( IOException e )
             {
-                e.printStackTrace();
+            	// Report error to our creator
+            	getSerialPortListener().dataReceived("ERROR: reading port " + getPortName() + ", leaving thread run() method!!!!!!!!!!!!");
+            	close();
+            	exit = true;
+            	// e.printStackTrace();
             }            	
 		}
 	}
+	
 	public int getSpeed() {
 		return speed;
 	}
