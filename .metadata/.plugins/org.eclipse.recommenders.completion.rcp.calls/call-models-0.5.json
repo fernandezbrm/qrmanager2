@@ -28,5 +28,10 @@
     "location": "C:\\git\\qrmanager2\\mfz-rxtx-2.2-20081207-win-x64\\RXTXcomm.jar",
     "status": "UNRESOLVED",
     "error": "No call model found for \u0027C:\\git\\qrmanager2\\mfz-rxtx-2.2-20081207-win-x64\\RXTXcomm.jar\u0027. Neither fingerprint \u00274f7501841eb130c1f5a5a2abf5ee20c1210d44e2\u0027 nor symbolic name \u0027RXTXcomm\u0027 are known."
+  },
+  "C:\\Users\\checador\\.m2\\repository\\org\\apache\\logging\\log4j\\log4j-api\\2.6.1\\log4j-api-2.6.1.jar": {
+    "location": "C:\\Users\\checador\\.m2\\repository\\org\\apache\\logging\\log4j\\log4j-api\\2.6.1\\log4j-api-2.6.1.jar",
+    "status": "UNRESOLVED",
+    "error": "No call model found for \u0027C:\\Users\\checador\\.m2\\repository\\org\\apache\\logging\\log4j\\log4j-api\\2.6.1\\log4j-api-2.6.1.jar\u0027. Neither fingerprint \u0027d2ad7ee0b0450204d720b4bc3f99b50e208bf51e\u0027 nor symbolic name \u0027org.apache.logging.log4j.api\u0027 are known."
   }
 }

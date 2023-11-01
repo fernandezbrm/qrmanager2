@@ -3,12 +3,11 @@
  */
 package qrmanager.dev;
 
-import java.util.Random;
-
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import gnu.io.CommPort;
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -22,6 +21,7 @@ public class RxTxSerialPort implements Runnable {
 	private static final int PORT_OPEN_TIMEOUT_MS = 2000;
 	private static final int ERROR = 0;
 	private static final int SUCCESS = 1;
+	private static Logger logger = LogManager.getLogger(RxTxSerialPort.class);
 	// Instance attributes
 	private String portName;
 	private int speed;
@@ -52,7 +52,7 @@ public class RxTxSerialPort implements Runnable {
 	        portIdentifier = CommPortIdentifier.getPortIdentifier(getPortName());
 	        if ( portIdentifier.isCurrentlyOwned() )
 	        {
-	            System.out.println("Error: Port " + getPortName() + " is currently in use");
+	            logger.error("Error: Port " + getPortName() + " is currently in use");
 	            return ERROR;
 	        }
 	        else
@@ -70,7 +70,7 @@ public class RxTxSerialPort implements Runnable {
 	            }
 	            else
 	            {
-	                System.out.println("Error: Only serial ports are handled by this example.");
+	            	logger.error("Error: Only serial ports are handled by this example.");
 	                return ERROR;
 	            }
 	        }     
@@ -99,7 +99,7 @@ public class RxTxSerialPort implements Runnable {
 	// Thread run method
 	public void run() {
 		boolean exit = false;
-		// System.out.println("!!!!!!!!!!!!!!!!!!!Entering run() for " + getPortName());
+		logger.debug("!!!!!!!!!!!!!!!!!!!Entering run() for " + getPortName());
 		
 		while (!exit) {
             byte[] buffer = new byte[1024];
@@ -114,11 +114,11 @@ public class RxTxSerialPort implements Runnable {
 	                {
 	                	// We got 1st group of data, append it to data
 	                	data.append(new String(buffer,0,len, "UTF-8"));
-	                    // System.out.println("<<<< Serial read = " + data);
+	                	logger.debug("<<<< Serial read = " + data);
 	                    // Continue reading until len is zero again
 	                    while ((len = this.in.read(buffer)) > 0) {
 	                    	data.append(new StringBuffer(new String(buffer,0,len, "UTF-8")));
-	                    	// System.out.println("<<<< Serial read = " + data);
+	                    	logger.debug("<<<< Serial read = " + data);
 	                    }
 	                    // len is zero again, we got QR data, report it to registered QRReadListener
 	                    getSerialPortListener().dataReceived(data.toString());
@@ -127,7 +127,7 @@ public class RxTxSerialPort implements Runnable {
             catch ( IOException e )
             {
             	// Report error to our creator
-            	getSerialPortListener().dataReceived("ERROR: reading port " + getPortName() + ", leaving thread run() method!!!!!!!!!!!!");
+            	getSerialPortListener().dataReceived("ERROR: reading port " + getPortName() + ", leaving thread run() method. This port not usable until fixing port issue and restarting QRmanager app !!!!!!!!!!!!");
             	close();
             	exit = true;
             	// e.printStackTrace();

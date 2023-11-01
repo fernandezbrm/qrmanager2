@@ -3,6 +3,8 @@
  */
 package qrmanager.dev;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.io.FileNotFoundException;
 import java.io.FileReader; 
 import java.io.IOException;
@@ -12,7 +14,6 @@ import java.util.List;
 import java.util.Map; 
 import java.util.Map.Entry;
 import java.util.*;
-
 import org.json.simple.JSONArray; 
 import org.json.simple.JSONObject; 
 import org.json.simple.parser.*; 
@@ -22,6 +23,7 @@ import org.json.simple.parser.*;
  *
  */
 public class ReadConfig {
+	// Class attributes
 	private static final String QRMANAGERS_ELEM = "qrManagers";
 	private static final String DIGITAL_OUTPUT_ELEM = "digitalOutput";
 	private static final String NAME_ELEM = "name";
@@ -31,6 +33,7 @@ public class ReadConfig {
 	private static final String PULSE_LENGTH_MS_ELEM = "pulseLengthMs";
 	private static final String SCHEMA_ELEMENTS_ELEM = "schemaElements";
 	private static final String ELEMENT_ELEM = "element";
+	private static Logger logger = LogManager.getLogger(ReadConfig.class);
 	
 	public List<QRManagerDTO> getQrManagers(String configFilePath) throws FileNotFoundException, IOException, ParseException {
 		List<QRManagerDTO> myDTO = new ArrayList<QRManagerDTO>();

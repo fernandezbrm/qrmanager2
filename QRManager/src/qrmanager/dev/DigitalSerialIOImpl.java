@@ -3,6 +3,9 @@
  */
 package qrmanager.dev;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 /**
  * 
  * This is a singleton class to manage digital outputs
@@ -15,6 +18,7 @@ public class DigitalSerialIOImpl implements DigitalIOInterface, SerialPortListen
 	// Class attributes
 	private static DoDTO dto; 
 	private static DigitalSerialIOImpl myInstance = null;
+	private static Logger logger = LogManager.getLogger(DigitalSerialIOImpl.class);
 	// Instance attributes
 	private RxTxSerialPort mySerialPort;
 	
@@ -25,7 +29,7 @@ public class DigitalSerialIOImpl implements DigitalIOInterface, SerialPortListen
 			ReadConfig conf = new ReadConfig();
 			dto = conf.getDigitalOutput(configFilePath);
 			myInstance = new DigitalSerialIOImpl(dto.getPortName(), dto.getSpeed());
-			System.out.println("DigitalSerialIOImpl singleton instance created: portName = " + dto.getPortName() + 
+			logger.info("DigitalSerialIOImpl singleton instance created: portName = " + dto.getPortName() + 
 					            ", speed = " + dto.getSpeed());
 		}
 		return myInstance;
@@ -43,7 +47,7 @@ public class DigitalSerialIOImpl implements DigitalIOInterface, SerialPortListen
 		
 		// Add output channel to string
 		cmdString = Integer.toString(channel)+"-1;";
-		//System.out.println(name + ": setOutputOn = " + cmdString);
+		logger.debug(": setOutputOn = " + cmdString);
 		
 		// Get byte array from string and send it out to serial USB to 
 		// digital output controller
@@ -58,7 +62,7 @@ public class DigitalSerialIOImpl implements DigitalIOInterface, SerialPortListen
 		
 		// Add output channel to string
 		cmdString = Integer.toString(channel)+"-0;";
-		// System.out.println(name + ": setOutputOff = " + cmdString);
+		logger.debug(name + ": setOutputOff = " + cmdString);
 		
 		// Get byte array from string and send it out to serial USB to 
 		// digital output controller
@@ -68,7 +72,7 @@ public class DigitalSerialIOImpl implements DigitalIOInterface, SerialPortListen
 	public void dataReceived(String reply) {
 		// TODO Auto-generated method stub
 		if (!reply.contains("SUCCESS")) {
-			System.out.println(" <<<< DigitalSerialIOImpl ERROR:" + this + " serial read = " + reply);
+			logger.error(" <<<< DigitalSerialIOImpl ERROR:" + this + " serial read = " + reply);
 		}
 	}
 

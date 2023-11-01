@@ -3,12 +3,19 @@
  */
 package qrmanager.dev;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.json.simple.parser.ParseException;
 
 import java.util.*;
+
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.config.ConfigurationSource;
+import org.apache.logging.log4j.core.config.Configurator;
 
 /**
  * @author Roberto Fernandez 
@@ -23,6 +30,7 @@ public class QRManager implements SerialPortListener, Runnable{
 	private static DigitalSerialIOImpl dSerialImpl;
 	private static List <String> schemaElements;
 	private static final int RETRY_PERIOD_MS = 5000;
+	private static Logger logger = LogManager.getLogger(QRManager.class);
 	// Instance attributes
 	private QRManagerDTO myQRManagerDTO;
 	private RxTxSerialPort myQRReader;
@@ -30,24 +38,36 @@ public class QRManager implements SerialPortListener, Runnable{
 	private int doChannel;
 	private int pulseLengthMs;
 	private String myName;
+	
+	/** 
+    static {
+        try {
+        	System.out.println("Changing log4j.xml config..........");
+            InputStream inputStream = new FileInputStream("C:/temp/log4j2.xml");
+            ConfigurationSource source = new ConfigurationSource(inputStream);
+            Configurator.initialize(null, source);
+        } catch (Exception ex) {
+            // Handle here
+        	System.out.println("ERROR: log4j configuration change failed!!!!!!!!!!!!!!!");
+        }
+    }
+    */
 
 	/** Constructor 
 	 * @throws Exception */
 	QRManager(QRManagerDTO qrManagerDTO, DigitalIOInterface dSerialIO) throws Exception {
-		// TODO Auto-generated method stub
-		/** System.out.println("QRManager: name = " + qrManagerDTO.getName() + 
+		logger.debug("QRManager: name = " + qrManagerDTO.getName() + 
 							", portName = " + qrManagerDTO.getPortName() + 
 							", speed = " + qrManagerDTO.getSpeed() + 
 							", doChannel = " + qrManagerDTO.getDoChannel() + 
 							" pulseLengthMs = " + qrManagerDTO.getpulseLenghtMs());
-		*/
 		
 		// Save our DTO
 		this.myQRManagerDTO = qrManagerDTO;
 		
 		/** Create RxTxReaderSerialPort */
 		setMyQRReader(new RxTxSerialPort(qrManagerDTO.getPortName(), qrManagerDTO.getSpeed(), this));
-		// System.out.println("QR reader serial port interface created");
+		logger.debug("QR reader serial port interface created");
 		
 		// Save the digital output channel bound to this QRManager instance
 		this.doChannel = qrManagerDTO.getDoChannel();
@@ -60,7 +80,7 @@ public class QRManager implements SerialPortListener, Runnable{
 		
 		/** Set digital output interface singleton instance reference*/
 		setMyDio(dSerialIO);
-		// System.out.println("Digital output interface singleton gotten");
+		logger.debug("Digital output interface singleton gotten");
 	}
 
 	private boolean validateJsonSchema(String qr) {
@@ -80,7 +100,7 @@ public class QRManager implements SerialPortListener, Runnable{
 		// Check if out thread reported an error and terminated
 		if (data.contains("ERROR: reading port")) {
 			// We got a fatal error with the QR reader serial to USB converter, try to recover
-			System.out.println(data);
+			logger.error(data);
 			// Destroy our RxTxSerialPort instance
 			setMyQRReader(null);
 			// Launch recovery thread
@@ -89,7 +109,7 @@ public class QRManager implements SerialPortListener, Runnable{
 		}
 		// Validate if QR matches schema JSON structure
 		else if (validateJsonSchema(data)) {
-			System.out.println(">>>> " + myName + " QR VALID = " + data + " ACCESS GRANTED");
+			logger.info(">>>> " + myName + " QR VALID = " + data + " ACCESS GRANTED");
 			// If QR valid, trigger momentary corresponding DO output
 			// in order to open lane barrier
 			this.getMyDio().setOutputOn(myName, doChannel); 
@@ -102,7 +122,7 @@ public class QRManager implements SerialPortListener, Runnable{
 			this.getMyDio().setOutputOff(myName, doChannel);
 		}
 		else {
-			System.out.println("<<<< " + myName + ": QR INVALID = " + data+ " ACCESS DENIED!!!!");
+			logger.info("<<<< " + myName + ": QR INVALID = " + data+ " ACCESS DENIED!!!!");
 		}
 	}
 	
@@ -111,21 +131,21 @@ public class QRManager implements SerialPortListener, Runnable{
 		boolean exit = false;
 		
 		while (!exit) {
-			System.out.println("Trying to recover serial port...");
+			logger.info("Trying to recover serial port...");
 			try {
 				/** Create RxTxReaderSerialPort */
 				setMyQRReader(new RxTxSerialPort(myQRManagerDTO.getPortName(), myQRManagerDTO.getSpeed(), this));
-				System.out.println("QR reader serial port interface created");
+				logger.info("QR reader serial port interface created");
 				// Leave thread
 				exit = true;
 			}
 			catch (Exception e) {
-				System.out.println("Error trying to recreate RxTxSerialPort");
+				logger.error("Error trying to recreate RxTxSerialPort");
 				setMyQRReader(null);
 			}
 			finally {
 				try {
-					System.out.println("Sleeping...");
+					logger.debug("Sleeping...");
 					Thread.sleep(RETRY_PERIOD_MS);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -157,9 +177,9 @@ public class QRManager implements SerialPortListener, Runnable{
 	 */
 	public static void main(String[] args) throws Exception {
 	    // Read command line arguments
-		System.out.println("Argument count: " + args.length);
+        logger.info("Argument count: " + args.length);
 	    for (int i = 0; i < args.length; i++) {
-	        System.out.println("Argument " + i + ": " + args[i]);
+	    	logger.info("Argument " + i + ": " + args[i]);
 	        if (0 == i) {
 	        	configFilePath = args[i];
 	        }
@@ -215,7 +235,7 @@ public class QRManager implements SerialPortListener, Runnable{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println("-------------------------------\n" +
+			logger.info("-------------------------------\n" +
 								"QRManager instance with parameters " + 
 								"name = " + myQRMDTO.get(i).getName() + 
 								", portName = " + myQRMDTO.get(i).getPortName() + 

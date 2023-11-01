@@ -2,4 +2,8 @@
 <qualifiedTypeNameHistroy>
 <fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="java.io.FileInputStream"/>
+<fullyQualifiedTypeName name="java.io.InputStream"/>
+<fullyQualifiedTypeName name="org.apache.logging.log4j.core.config.ConfigurationSource"/>
+<fullyQualifiedTypeName name="org.apache.logging.log4j.core.config.Configurator"/>
 </qualifiedTypeNameHistroy>

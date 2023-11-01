@@ -299,6 +299,19 @@
     "javaRuntime": true
   },
   {
+    "symbolicName": "org.apache.logging.log4j.api",
+    "version": {
+      "major": 2,
+      "minor": 6,
+      "micro": 1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "d2ad7ee0b0450204d720b4bc3f99b50e208bf51e",
+    "jarFileModificationDate": "2023-11-01T11:44:01.664-06:00",
+    "location": "C:\\Users\\checador\\.m2\\repository\\org\\apache\\logging\\log4j\\log4j-api\\2.6.1\\log4j-api-2.6.1.jar",
+    "javaRuntime": false
+  },
+  {
     "symbolicName": "jre",
     "version": {
       "major": 1,
@@ -453,6 +466,19 @@
     "jarFileModificationDate": "2023-10-28T12:39:13.993-05:00",
     "location": "C:\\Program Files\\Java\\jre1.8.0_202\\lib\\jce.jar",
     "javaRuntime": true
+  },
+  {
+    "symbolicName": "org.apache.logging.log4j.core",
+    "version": {
+      "major": 2,
+      "minor": 6,
+      "micro": 1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "2b557bf1023c3a3a0f7f200fafcd7641b89cbb83",
+    "jarFileModificationDate": "2023-11-01T11:44:01.939-06:00",
+    "location": "C:\\Users\\checador\\.m2\\repository\\org\\apache\\logging\\log4j\\log4j-core\\2.6.1\\log4j-core-2.6.1.jar",
+    "javaRuntime": false
   },
   {
     "symbolicName": "jre",
