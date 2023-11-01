@@ -2,12 +2,12 @@
 <Configuration status="DEBUG">
    <Appenders>
         <Console name="LogToConsole" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:MM:ss} %C %p  %m%n"/>
+            <PatternLayout pattern="%d{DATE} %C %p  %m%n"/>
         </Console>
         <RollingFile name="LogToRollingFile" fileName="c:/temp/logs/qrmanager.log"
                     filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
         	<PatternLayout>
-            		<Pattern>%d{yyyy-MM-dd HH:MM:ss} %C %p  %m%n</Pattern>
+            		<Pattern>%d{DATE} %C %p  %m%n</Pattern>
         	</PatternLayout>
         	<Policies>
             		<TimeBasedTriggeringPolicy />
