@@ -33,27 +33,27 @@
 <dependencies>
     <!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
 	<dependency>
-    	<groupId>com.googlecode.json-simple</groupId>
-    	<artifactId>json-simple</artifactId>
-    	<version>1.1.1</version>
+    		<groupId>com.googlecode.json-simple</groupId>
+    		<artifactId>json-simple</artifactId>
+    		<version>1.1.1</version>
 	</dependency>
 	<dependency>
-    	<groupId>gnu.rxtx</groupId>
-    	<artifactId>sample</artifactId>
-    	<version>1.0</version>
-    	<scope>system</scope>
-    	<systemPath>C:\git\qrmanager2\mfz-rxtx-2.2-20081207-win-x64\RXTXcomm.jar</systemPath>
+    		<groupId>gnu.rxtx</groupId>
+    		<artifactId>sample</artifactId>
+    		<version>1.0</version>
+    		<scope>system</scope>
+    		<systemPath>C:\git\qrmanager2\mfz-rxtx-2.2-20081207-win-x64\RXTXcomm.jar</systemPath>
 	</dependency>
-<dependency>
-    <groupId>org.apache.logging.log4j</groupId>
-    <artifactId>log4j-api</artifactId>
-    <version>2.6.1</version>
-</dependency>
-<dependency>
-    <groupId>org.apache.logging.log4j</groupId>
-    <artifactId>log4j-core</artifactId>
-    <version>2.6.1</version>
-</dependency>
+	<dependency>
+    		<groupId>org.apache.logging.log4j</groupId>
+    		<artifactId>log4j-api</artifactId>
+    		<version>2.6.1</version>
+	</dependency>
+	<dependency>
+    		<groupId>org.apache.logging.log4j</groupId>
+    		<artifactId>log4j-core</artifactId>
+    		<version>2.6.1</version>
+	</dependency>
 </dependencies>
      
   <build>  
