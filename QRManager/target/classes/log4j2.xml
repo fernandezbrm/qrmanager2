@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="DEBUG">
-   <Appenders>
+	<Appenders>
         <Console name="LogToConsole" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{DATE} %C %p  %m%n"/>
         </Console>
@@ -10,9 +10,14 @@
             		<Pattern>%d{DATE} %C %p  %m%n</Pattern>
         	</PatternLayout>
         	<Policies>
-            		<TimeBasedTriggeringPolicy />
             		<SizeBasedTriggeringPolicy size="10 MB"/>
         	</Policies>
+		<DefaultRolloverStrategy max="10">
+			<Delete basePath="c:/temp/logs" maxDepth="2">
+				<IfFileName glob="*/app-*.log.gz" />
+				<IfLastModified age="P30D" />
+			</Delete>
+		</DefaultRolloverStrategy>
     	</RollingFile>
 
     </Appenders>
