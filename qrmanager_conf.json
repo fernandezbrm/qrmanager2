@@ -2,21 +2,21 @@
   "qrManagers": [
   	{
   		"name": "Carril 1", 
-  		"portName": "COM4", 
+  		"portName": "COM3", 
   		"speed": 115200, 
   		"doChannel": 2,
 		"pulseLengthMs": 200
   	},
   	{
   		"name": "Carril 2", 
-  		"portName": "COM5", 
+  		"portName": "COM4", 
   		"speed": 115200, 
   		"doChannel": 3,
 		"pulseLengthMs": 200
   	},
   	{
   		"name": "Carril 3", 
-  		"portName": "COM6", 
+  		"portName": "COM5", 
   		"speed": 115200, 
   		"doChannel": 4,
 		"pulseLengthMs": 200
