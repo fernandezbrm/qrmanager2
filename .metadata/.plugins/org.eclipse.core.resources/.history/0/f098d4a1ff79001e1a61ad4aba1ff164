@@ -5,11 +5,9 @@ package qrmanager.dev;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
-
 import gnu.io.CommPort;
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -23,7 +21,6 @@ public class RxTxSerialPort implements Runnable {
 	private static final int PORT_OPEN_TIMEOUT_MS = 2000;
 	private static final int ERROR = 0;
 	private static final int SUCCESS = 1;
-	private static final int THREAD_SLEEP_MS = 5;
 	private static Logger logger = LogManager.getLogger(RxTxSerialPort.class);
 	// Instance attributes
 	private String portName;
@@ -103,7 +100,6 @@ public class RxTxSerialPort implements Runnable {
 	public void run() {
 		boolean exit = false;
 		byte[] buffer = new byte[1024];
-		StringBuffer data = new StringBuffer();
         int len;
 		logger.debug("!!!!!!!!!!!!!!!!!!!Entering run() for " + getPortName());
 		
@@ -113,7 +109,7 @@ public class RxTxSerialPort implements Runnable {
             {
 	            	// Simple state machine, start concatenating incoming data when len is not zero
 	            	// until len is again zero
-            		data.setLength(0);
+	            	StringBuffer data = new StringBuffer();
 	            	len = 0;
 	                while ((len = this.in.read(buffer)) > 0)
 	                {

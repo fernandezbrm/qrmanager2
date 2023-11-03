@@ -5,11 +5,9 @@ package qrmanager.dev;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
-
 import gnu.io.CommPort;
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;

@@ -128,6 +128,12 @@ public class RxTxSerialPort implements Runnable {
 	                    // len is zero again, we got QR data, report it to registered QRReadListener
 	                    getSerialPortListener().dataReceived(data.toString());
 	                }
+	                try {
+						Thread.sleep(THREAD_SLEEP_MS);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
             }
             catch ( IOException e )
             {
