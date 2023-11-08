@@ -109,7 +109,6 @@ public class QRManager implements SerialPortListener, Runnable{
 		}
 		// Validate if QR matches schema JSON structure
 		else if (validateJsonSchema(data)) {
-			// System.out.println(">>>> " + myName + " QR VALID = " + data + " ACCESS GRANTED");
 			logger.info(">>>> " + myName + " QR VALID = " + data + " ACCESS GRANTED");
 			// If QR valid, trigger momentary corresponding DO output
 			// in order to open lane barrier
@@ -123,7 +122,6 @@ public class QRManager implements SerialPortListener, Runnable{
 			this.getMyDio().setOutputOff(myName, doChannel);
 		}
 		else {
-			// System.out.println("<<<< " + myName + ": QR INVALID = " + data+ " ACCESS DENIED!!!!");
 			logger.info("<<<< " + myName + ": QR INVALID = " + data+ " ACCESS DENIED!!!!");
 		}
 	}

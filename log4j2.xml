@@ -2,7 +2,9 @@
 <Configuration status="DEBUG">
 	<Appenders>
         <Console name="LogToConsole" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{DATE} %C %p  %m%n"/>
+           	<PatternLayout charset="UTF-8">
+            		<Pattern>%d{DATE} %C %p  %m%n</Pattern>
+        	</PatternLayout>
         </Console>
         <RollingFile name="LogToRollingFile" fileName="c:/temp/logs/qrmanager.log"
                     filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
@@ -10,7 +12,7 @@
             		<Pattern>%d{DATE} %C %p  %m%n</Pattern>
         	</PatternLayout>
         	<Policies>
-            		<SizeBasedTriggeringPolicy size="10 MB"/>
+            		<SizeBasedTriggeringPolicy size="500 KB"/>
         	</Policies>
 		<DefaultRolloverStrategy max="10">
 			<Delete basePath="c:/temp/logs" maxDepth="2">
