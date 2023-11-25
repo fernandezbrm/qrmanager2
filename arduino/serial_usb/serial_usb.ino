@@ -3,16 +3,17 @@
 //
 // Command format: 
 //    Output_Pin-State;
-//    Where Output_Pin can be in numeric range of 0-13
+//    Where Output_Pin can be in numeric range of 2-13
 //    Where State can be 0 or 1 
 //
 //  Examples: 13-1; 2-0; 8-1;
 //
 
 // this is the speed at which to initiate the serial over USB connection 
-#define PORT_SPEED 9600
+#define PORT_SPEED 115200
 #define SERIAL_READ_TO_MS 10
-#define PIN_MIN 0
+// Pins 0 and 1 are serial UART, excluded
+#define PIN_MIN 2
 #define PIN_MAX 13
 #define OFF 0
 #define ON  1
@@ -26,19 +27,41 @@ void setup() {
   // Initialize serial USB port
   Serial.begin(PORT_SPEED);
   Serial.setTimeout(SERIAL_READ_TO_MS);
-  // sets the digital pin 13 as output
+  // sets the digital pin 2 to 13 as output
 
   // All IO pins set as output
-  for (int i = 0; i <= PIN_MAX; i++) {  
+  for (int i = PIN_MIN; i <= PIN_MAX; i++) {  
     pinMode(i, OUTPUT);    
   }
 }
 
 void processCommand() {
+  // Validate pin is a number
+  for (int i = 0; i < outPin.length(); i++) {
+    if (!isDigit(outPin[i])) {
+      Serial.write("ERROR: One or more pin digits are not a decimal digit [");  
+      Serial.print(outPin);
+      Serial.write("]");
+      return;
+    }
+  }
+
+  // Validate state is a number
+  for (int i = 0; i < outPinState.length(); i++) {
+    if (!isDigit(outPinState[i])) {
+      Serial.write("ERROR: One or more state digits are not a decimal digit [");  
+      Serial.print(outPinState);
+      Serial.write("]");
+      return;
+    }
+  }
+
   int pin = outPin.toInt();
+  // Serial.print(">>>> PIN = ");
+  // Serial.print(pin);
   int state = outPinState.toInt();
  
-  if ((pin < 0) || (pin > 13)) {
+  if ((pin < PIN_MIN) || (pin > PIN_MAX)) {
     Serial.write("ERROR: Invalid pin number [");
     Serial.print(pin);
     Serial.write("]");
@@ -75,34 +98,17 @@ void loop() {
       switch(fsmState) {
         case 0:
           if (commandBuffer[i] != '-') {
-            if (isDigit(commandBuffer[i])) {
-              outPin.concat(commandBuffer[i]); 
-            }
-            else {
-              resetFsm = true;
-              break;
-            }           
+            outPin.concat(commandBuffer[i]);     
           }
           else {
-            // Serial.print("outPin = ");
-            // Serial.println(outPin);
             fsmState = 1;
           }
           break; 
         case 1:
           if (commandBuffer[i] != ';') {
-            if (isDigit(commandBuffer[i])) {
-              outPinState.concat(commandBuffer[i]);
-            }
-            else {
-              resetFsm = true;
-              break;
-            }           
+            outPinState.concat(commandBuffer[i]);
           }
           else {
-            // Serial.print("outPinState = ");
-            // Serial.println(outPinState);
-            // Process received command
             processCommand();
             // Reset all FSM state variables to start over
             resetFsm = true;
