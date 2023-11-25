@@ -25,7 +25,7 @@
   "digitalOutput": 
   {
   	"portName": "COM7", 
-  	"speed": 9600
+  	"speed": 115200
   },
   "schemaElements": [
 	{
