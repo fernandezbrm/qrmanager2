@@ -8,7 +8,7 @@ char buf[16]; // the input buffer
 int index = 0; // current position in buffer
 
 void outwiegbit(unsigned int b); // output one Wiegand bit
-void outwieg26(uint32_t u32); // output a Wiegand-26 code
+void outwieg34(uint32_t u32); // output a Wiegand-32 code
 void process_line(const char str[]); // process the input line received from the serial port
 
 void loop() 
