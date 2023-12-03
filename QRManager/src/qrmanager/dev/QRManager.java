@@ -225,6 +225,7 @@ public class QRManager implements SerialPortListener, Runnable{
 		
 		// Get DigitalSerialIOImpl singleton instance to be used 
 		// by all QRManager instances
+		logger.info("-------------------------------\n");
 		dSerialImpl = DigitalSerialIOImpl.getInstance(configFilePath);
 
 		for (int i = 0; i < myQRMDTO.size(); i++) {

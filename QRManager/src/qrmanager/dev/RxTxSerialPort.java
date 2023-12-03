@@ -114,8 +114,10 @@ public class RxTxSerialPort implements Runnable {
 	            	// Simple state machine, start concatenating incoming data when len is not zero
 	            	// until len is again zero
             		data.setLength(0);
-	            	len = 0;
-	                while ((len = this.in.read(buffer)) > 0)
+	            	// len = 0;
+			len = this.in.read(buffer);
+			logger.debug(">>>> port = " + this.getPortName() + ", len = " + len);
+	                while ( len > 0)
 	                {
 	                	// We got 1st group of data, append it to data
 	                	data.append(new String(buffer,0,len, "UTF-8"));
