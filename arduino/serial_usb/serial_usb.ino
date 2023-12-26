@@ -15,8 +15,12 @@
 // Pins 0 and 1 are serial UART, excluded
 #define PIN_MIN 2
 #define PIN_MAX 13
+// Command pin states
 #define OFF 0
 #define ON  1
+// Active/Inactive positive/negative logic 
+#define ACTIVE   OFF
+#define INACTIVE ON
 
 // State variables 
 int fsmState = 0;
@@ -31,7 +35,8 @@ void setup() {
 
   // All IO pins set as output
   for (int i = PIN_MIN; i <= PIN_MAX; i++) {  
-    pinMode(i, OUTPUT);    
+    pinMode(i, OUTPUT); 
+    digitalWrite(i, INACTIVE);    
   }
 }
 
@@ -68,11 +73,11 @@ void processCommand() {
     return;
   }
 
-  if (state == 0) {
-    digitalWrite(pin, LOW); // sets the digital pin to OFF
+  if (state == OFF) {
+    digitalWrite(pin, INACTIVE); // sets the digital pin to INACTIVE state
   }
-  else if (state == 1) {
-  digitalWrite(pin, HIGH); // sets the digital pin to OFF
+  else if (state == ON) {
+    digitalWrite(pin, ACTIVE); // sets the digital pin to ACTIVE state
   }
   else {
       Serial.write("ERROR: Invalid pin state [");
