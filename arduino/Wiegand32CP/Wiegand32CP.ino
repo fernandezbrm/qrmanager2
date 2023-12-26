@@ -1,6 +1,10 @@
 
 const int W_D0 = 2; // Wiegand data 0 line is assigned to Arduino pin D2
 const int W_D1 = 3; //   "       "  1  "            "            "    D3
+// const int TPW_USECS = 80; // Pulse Width Time
+// const int TPI_USECS = 240; // Pulse Interval Time
+const int TPW_USECS = 100; // Pulse Width Time
+const int TPI_USECS = 1000; // Pulse Interval Time
 
 // serial line input variables
 boolean got_line; // 'true' on newline ('\n') reception
@@ -51,9 +55,9 @@ void outwiegbit(unsigned int b)
 {
   int sel = b == 0 ? W_D0 : W_D1;
   digitalWrite(sel, 0);
-  delayMicroseconds(80);
+  delayMicroseconds(TPW_USECS);
   digitalWrite(sel, 1);
-  delayMicroseconds(240);
+  delayMicroseconds(TPI_USECS);
 }
 
 // outputs a 34 bit Wiegand code
