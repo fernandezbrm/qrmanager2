@@ -29,7 +29,10 @@ public class QRManager implements SerialPortListener, Runnable{
 	private static List<QRManagerDTO> myQRMDTO = new ArrayList<QRManagerDTO>();
 	private static DigitalSerialIOImpl dSerialImpl;
 	private static List <String> schemaElements;
-	private static final int RETRY_PERIOD_MS = 5000;
+	private static final int RETRY_PERIOD_MS   = 5000;
+	private static final int RUN_LED_PIN 	   = 13;
+	private static final int RUN_LED_PERIOD_MS = 1000;
+	private static final String QRMANAGER_NAME = "QRManager Main Thread";
 	private static Logger logger = LogManager.getLogger(QRManager.class);
 	// Instance attributes
 	private QRManagerDTO myQRManagerDTO;
@@ -244,7 +247,19 @@ public class QRManager implements SerialPortListener, Runnable{
 								", portName = " + myQRMDTO.get(i).getPortName() + 
 								", speed = " + myQRMDTO.get(i).getSpeed() +  
 								" doChannel = " + myQRMDTO.get(i).getDoChannel() +  
-								" pulseLengthMs = " + myQRMDTO.get(i).getpulseLenghtMs() + " created");
+								" pulseLengthMs = " + 				   myQRMDTO.get(i).getpulseLenghtMs() + " created");
 		}
+		
+		// Report QRManager is up and running by blinking pin 13 LED
+		while (true) {
+		   dSerialImpl.setOutputOn(QRMANAGER_NAME, RUN_LED_PIN); 
+		   try {
+		      Thread.sleep(RUN_LED_PERIOD_MS); 
+		   } catch (InterruptedException e) {
+	              // TODO Auto-generated catch block
+		      e.printStackTrace();
+		   } 
+		   dSerialImpl.setOutputOff(QRMANAGER_NAME, RUN_LED_PIN);
+		} 
 	}
 }
