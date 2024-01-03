@@ -278,6 +278,12 @@ public class QRManager implements SerialPortListener, Runnable{
 		  e.printStackTrace();
 	       } 
 	       dSerialImpl.setOutputOff(QRMANAGER_NAME, RUN_LED_PIN);
+	       try {
+	          Thread.sleep(RUN_LED_PERIOD_MS); 
+	       } catch (InterruptedException e) {
+	          // TODO Auto-generated catch block
+		  e.printStackTrace();
+	       } 
 	    } 
 	} // End of main() method
 } // End of QRManager class
