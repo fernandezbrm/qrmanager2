@@ -1,19 +1,29 @@
-const int W_D0 = 2; // Wiegand data 0 line is assigned to Arduino pin D2
-const int W_D1 = 3; //   "       "  1  "            "            "    D3
-// const int TPW_USECS = 80; // Pulse Width Time
-// const int TPI_USECS = 240; // Pulse Interval Time
-const int TPW_USECS = 100; // Pulse Width Time
-const int TPI_USECS = 1000; // Pulse Interval Time
+// Wiegand data 0 line is assigned to Arduino pin D2
+const int W_D0 = 2; 
+// Wiegand data 1 line is assigned to Arduino pin D3
+const int W_D1 = 3;  
+// Pulse Width Time
+// const int TPW_USECS = 80;
+const int TPW_USECS = 100; 
+// Pulse Interval Time
+// const int TPI_USECS = 240;
+const int TPI_USECS = 1000; 
 const boolean PARITY_ON = false; // Controls sending or not parity bits
+// Control order of transmission of Wiegand bits. 
+// Value true, send bits in forward order. false sends in reverse order.
+const boolean FORWARD = true; 
 
 // serial line input variables
 boolean got_line; // 'true' on newline ('\n') reception
 char buf[16]; // the input buffer
 int index = 0; // current position in buffer
 
-void outwiegbit(unsigned int b); // output one Wiegand bit
-void outwieg34(uint32_t u32); // output a Wiegand-32 code
-void process_line(const char str[]); // process the input line received from the serial port
+// output one Wiegand bit
+void outwiegbit(unsigned int b);
+// output a Wiegand-32 code 
+void outwieg34(uint32_t u32); 
+// process the input line received from the serial port
+void process_line(const char str[]); 
 
 void loop() 
 {
@@ -53,6 +63,7 @@ void setup ()
 // outputs ONE Wiegand bit
 void outwiegbit(unsigned int b)
 {
+  Serial.print(b);
   int sel = b == 0 ? W_D0 : W_D1;
   digitalWrite(sel, 0);
   delayMicroseconds(TPW_USECS);
@@ -85,9 +96,21 @@ void outwieg34(uint32_t u32)
     Serial.println("Parity even");
     outwiegbit(p_even);
   }
-  for (int n=0; n<32; ++n)
-  {
-    outwiegbit((u32 >> (31-n)) & 1);
+  Serial.println("----------------------------------------------");
+  // Send data bits
+  if (FORWARD) {
+     // Send bits in forward order
+     for (int n=0; n<32; ++n)
+     {
+        outwiegbit((u32 >> (31-n)) & 1);
+     }
+  }
+  else {
+    // Send bits in reverse order
+     for (int n=31; n>=0; --n)
+     {
+        outwiegbit((u32 >> (31-n)) & 1);
+     }  
   }
   if (PARITY_ON) {
     Serial.println("Parity odd");
