@@ -1,10 +1,10 @@
-
 const int W_D0 = 2; // Wiegand data 0 line is assigned to Arduino pin D2
 const int W_D1 = 3; //   "       "  1  "            "            "    D3
 // const int TPW_USECS = 80; // Pulse Width Time
 // const int TPI_USECS = 240; // Pulse Interval Time
 const int TPW_USECS = 100; // Pulse Width Time
 const int TPI_USECS = 1000; // Pulse Interval Time
+const boolean PARITY_ON = false; // Controls sending or not parity bits
 
 // serial line input variables
 boolean got_line; // 'true' on newline ('\n') reception
@@ -60,7 +60,8 @@ void outwiegbit(unsigned int b)
   delayMicroseconds(TPI_USECS);
 }
 
-// outputs a 34 bit Wiegand code
+// outputs a 34 bit Wiegand code if PARITY_ON is true including even and odd parity bits
+// Otherwise, only send the 32 bits data with NO parity bits
 // u32 is actually the 32-bit numeric code
 void outwieg34(uint32_t u32)
 {
@@ -80,12 +81,18 @@ void outwieg34(uint32_t u32)
     tmp >>= 1;
   }
   // now output data bits framed by parity ones
-  outwiegbit(p_even);
+  if (PARITY_ON) {
+    Serial.println("Parity even");
+    outwiegbit(p_even);
+  }
   for (int n=0; n<32; ++n)
   {
     outwiegbit((u32 >> (31-n)) & 1);
   }
-  outwiegbit(p_odd);  
+  if (PARITY_ON) {
+    Serial.println("Parity odd");
+    outwiegbit(p_odd);
+  }  
 }
 
 // output just 'meaningful' numbers
