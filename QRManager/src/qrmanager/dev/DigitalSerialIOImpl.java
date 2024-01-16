@@ -41,7 +41,7 @@ public class DigitalSerialIOImpl implements DigitalIOInterface, SerialPortListen
 	}
 
 	/** setOutputOn */
-	public synchronized int setOutputOn(String name, int channel) {
+	public int setOutputOn(String name, int channel) {
 		// TODO Auto-generated method stub
 		String cmdString;
 		
@@ -51,12 +51,14 @@ public class DigitalSerialIOImpl implements DigitalIOInterface, SerialPortListen
 		
 		// Get byte array from string and send it out to serial USB to 
 		// digital output controller
-		mySerialPort.sendBytes(cmdString.getBytes());
+                synchronized (this) { 
+		  mySerialPort.sendBytes(cmdString.getBytes());
+ 		}
 		return 0;
 	}
 
 	/** setOutputOff */
-	public synchronized int setOutputOff(String name, int channel) {
+	public int setOutputOff(String name, int channel) {
 		// TODO Auto-generated method stub
 		String cmdString;
 		
@@ -66,7 +68,9 @@ public class DigitalSerialIOImpl implements DigitalIOInterface, SerialPortListen
 		
 		// Get byte array from string and send it out to serial USB to 
 		// digital output controller
-		mySerialPort.sendBytes(cmdString.getBytes());
+		synchronized (this) { 
+		  mySerialPort.sendBytes(cmdString.getBytes());
+		}
 		return 0;		
 	}
 	public void dataReceived(String reply) {
