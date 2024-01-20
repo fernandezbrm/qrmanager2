@@ -31,8 +31,7 @@ public class RxTxSerialPort implements Runnable {
 	private SerialPortListener serialPortListener;
 	private CommPortIdentifier portIdentifier;
 	private CommPort commPort;
-	private InputStream in;
-	private OutputStream out;
+        private SerialPort serialPort; 
 
 	RxTxSerialPort(String portName, int speed, SerialPortListener serialPortListener) throws Exception{
 		setPortName(portName);
@@ -65,11 +64,8 @@ public class RxTxSerialPort implements Runnable {
 	            
 	            if ( commPort instanceof SerialPort )
 	            {
-	                SerialPort serialPort = (SerialPort) commPort;
+	                serialPort = (SerialPort) commPort;
 	                serialPort.setSerialPortParams(getSpeed(),SerialPort.DATABITS_8,SerialPort.STOPBITS_1,SerialPort.PARITY_NONE);
-	                
-	                this.in = serialPort.getInputStream();
-	                this.out = serialPort.getOutputStream();
 	            }
 	            else
 	            {
@@ -83,14 +79,12 @@ public class RxTxSerialPort implements Runnable {
 	   void close() {
 		   commPort.close();
 		   portIdentifier = null;
-		   in = null;
-		   out = null;
 	   }
 	   
 	   // Send out a stream of byte out the serial port
 	   public int sendBytes(byte[] cmd) {
 		try {
-			out.write(cmd);
+			serialPort.getOutputStream().write(cmd);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -114,8 +108,8 @@ public class RxTxSerialPort implements Runnable {
 	            	// Simple state machine, start concatenating incoming data when len is not zero
 	            	// until len is again zero
             		data.setLength(0);
-	            	// len = 0;
-			len = this.in.read(buffer);
+
+			len = serialPort.getInputStream().read(buffer);
 			logger.debug(">>>> port = " + this.getPortName() + ", len = " + len);
 	                while ( len > 0)
 	                {
@@ -123,7 +117,7 @@ public class RxTxSerialPort implements Runnable {
 	                	data.append(new String(buffer,0,len, "UTF-8"));
 	                	logger.debug("<<<< Serial read = " + data);
 	                    // Continue reading until len is zero again
-	                    while ((len = this.in.read(buffer)) > 0) {
+	                    while ((len = serialPort.getInputStream().read(buffer)) > 0) {
 	                    	data.append(new String(buffer,0,len, "UTF-8"));
 	                    	logger.debug("<<<< Serial read = " + data);
 	                    }
@@ -134,10 +128,11 @@ public class RxTxSerialPort implements Runnable {
             catch ( IOException e )
             {
             	// Report error to our creator
-            	getSerialPortListener().dataReceived("ERROR: reading port " + getPortName() + ", leaving thread run() method. This port not usable until fixing port issue and restarting QRmanager app !!!!!!!!!!!!");
-            	close();
-            	exit = true;
-            	// e.printStackTrace();
+                getSerialPortListener().dataReceived("ERROR: reading port " + getPortName()); 
+            	// getSerialPortListener().dataReceived("ERROR: reading port " + getPortName() + ", leaving thread run() method. This port not usable until fixing port issue and restarting QRmanager app !!!!!!!!!!!!");
+            	// close();
+            	// exit = true;
+            	e.printStackTrace();
             }            	
 		}
 	}
