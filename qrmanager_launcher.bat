@@ -1,1 +1,1 @@
-java -cp "c:\temp;c:\git\qrmanager2\QRManager\target\QRManager-0.0.1-SNAPSHOT-jar-with-dependencies.jar" qrmanager.dev.QRManager c:\temp\qrmanager_conf.json
+java -cp "c:\temp;c:\git\qrmanager2\QRManager\target\QRManager-0.0.2-SNAPSHOT-jar-with-dependencies.jar" qrmanager.dev.QRManager c:\temp\qrmanager_conf.json

@@ -1,30 +1,37 @@
-{  
+{
   "qrManagers": [
   	{
   		"name": "Carril 1", 
-  		"portName": "COM3", 
+  		"portName": "COM7", 
   		"speed": 115200, 
   		"doChannel": 2,
 		"pulseLengthMs": 200
   	},
   	{
   		"name": "Carril 2", 
-  		"portName": "COM4", 
+  		"portName": "COM5", 
   		"speed": 115200, 
   		"doChannel": 3,
 		"pulseLengthMs": 200
   	},
   	{
   		"name": "Carril 3", 
-  		"portName": "COM5", 
+  		"portName": "COM6", 
   		"speed": 115200, 
   		"doChannel": 4,
+		"pulseLengthMs": 200
+  	},
+  	{
+  		"name": "Carril 4", 
+  		"portName": "COM12", 
+  		"speed": 115200, 
+  		"doChannel": 5,
 		"pulseLengthMs": 200
   	}
   ],
   "digitalOutput": 
   {
-  	"portName": "COM7", 
+  	"portName": "COM16", 
   	"speed": 115200
   },
   "schemaElements": [
