@@ -13,6 +13,9 @@ import gnu.io.SerialPort;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Writer;
+import java.io.StringWriter;
+import java.io.PrintWriter;
 
 /**
  * @author Roberto Fernandez 
@@ -128,11 +131,13 @@ public class RxTxSerialPort implements Runnable {
             catch ( IOException e )
             {
             	// Report error to our creator
-                getSerialPortListener().dataReceived("ERROR: reading port " + getPortName()); 
-            	// getSerialPortListener().dataReceived("ERROR: reading port " + getPortName() + ", leaving thread run() method. This port not usable until fixing port issue and restarting QRmanager app !!!!!!!!!!!!");
+                Writer writer = new StringWriter();
+                e.printStackTrace(new PrintWriter(writer));
+                String s = writer.toString();
+                getSerialPortListener().dataReceived("ERROR: reading port " + getPortName() + " " + s); 
+            	// getSerialPortListener().dataReceived("ERROR: reading port " + getPortName() + ", leaving thread run() method. This port not usable until fixing port issue and restarting QRmanager app !!!!!!!!!!!!" + " " + s);
             	// close();
             	// exit = true;
-            	e.printStackTrace();
             }            	
 		}
 	}
