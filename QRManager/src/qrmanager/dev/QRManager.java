@@ -121,7 +121,7 @@ public class QRManager implements SerialPortListener, Runnable{
 		   // We got a fatal error with the QR reader serial to USB converter, try to recover
 		   logger.error(data);
 		   // Destroy our RxTxSerialPort instance
-		   setMyQRReader(null);
+		   // setMyQRReader(null);
 		   // Launch recovery thread
 		   // Thread thread = new Thread(this);
 		   // thread.start();
