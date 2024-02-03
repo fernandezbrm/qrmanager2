@@ -3,6 +3,9 @@
 const int DOOR_LOCK = 10;
 const int DOOR_LOCK_DELAY = 2000;
 
+const int ACTIVE   = 0;
+const int INACTIVE = 1;
+
 const int W1_D0 = 2;
 const int W1_D1 = 3;
 const int W2_D0 = 4;
@@ -20,7 +23,7 @@ void setup() {
 	Serial.begin(9600);  
   pinMode(DOOR_LOCK, OUTPUT);
   // Door lock starts on
-  digitalWrite(DOOR_LOCK, 1);
+  digitalWrite(DOOR_LOCK, ACTIVE);
    
 	// default Wiegand Pin 2 and Pin 3 see image on README.md
 	// for non UNO board, use wg.begin(pinD0, pinD1) where pinD0 and pinD1 
@@ -32,9 +35,9 @@ void setup() {
 }
 
 void openDoorLock() {
-  digitalWrite(DOOR_LOCK, 0);
+  digitalWrite(DOOR_LOCK, INACTIVE);
   delay(DOOR_LOCK_DELAY);
-  digitalWrite(DOOR_LOCK, 1);
+  digitalWrite(DOOR_LOCK, ACTIVE);
 }
 
 void loop() {
