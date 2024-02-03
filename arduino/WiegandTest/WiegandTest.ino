@@ -67,9 +67,7 @@ void loop() {
         numCards = sizeof(validCards)/sizeof(unsigned long);
     for (int i = 0; i++; i < numCards) {
        if (wg2.getCode() == validCards[i]) {
-        Serial.println("READER 2: Valid card read
-        
-        , release door lock");
+        Serial.println("READER 2: Valid card read, release door lock");
         openDoorLock();
         break;
        }      
