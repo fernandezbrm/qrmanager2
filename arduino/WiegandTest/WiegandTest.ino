@@ -42,7 +42,8 @@ void openDoorLock() {
 
 void loop() {
   int numCards;
-  
+  bool validCard;
+
 	if(wg1.available()) {
 		Serial.print("Wiegand HEX = ");
 		Serial.print(wg1.getCode(),HEX);
@@ -51,12 +52,22 @@ void loop() {
 		Serial.print(", Type W");
 		Serial.println(wg1.getWiegandType());
     numCards = sizeof(validCards)/sizeof(unsigned long);
-    for (int i = 0; i++; i < numCards) {
+    validCard = false;
+    for (int i = 0; i < numCards; i++) {
+       // Serial.println("validCards = ");
+       // Serial.println(validCards[i], HEX);
        if (wg1.getCode() == validCards[i]) {
-        Serial.println("READER 1: Valid card read, release door lock");
+        Serial.print("READER 1: Valid card read, ");
+        Serial.print(validCards[i], HEX);
+        Serial.println(", release door lock");
+        validCard = true;
         openDoorLock();
         break;
        }      
+    }
+    if (!validCard) {
+      Serial.print("READER 1: INVALID card read, ");
+      Serial.println(wg1.getCode(), HEX);
     }
   }
 
@@ -67,13 +78,22 @@ void loop() {
     Serial.print(wg2.getCode());
     Serial.print(", Type W");
     Serial.println(wg2.getWiegandType());
-        numCards = sizeof(validCards)/sizeof(unsigned long);
-    for (int i = 0; i++; i < numCards) {
+    numCards = sizeof(validCards)/sizeof(unsigned long);
+    validCard = false;
+    for (int i = 0; i < numCards; i++) {
        if (wg2.getCode() == validCards[i]) {
-        Serial.println("READER 2: Valid card read, release door lock");
+        Serial.print("READER 1: Valid card read, ");
+        Serial.print(validCards[i], HEX);
+        Serial.println(", release door lock");
+        validCard = true;
         openDoorLock();
         break;
        }      
     }    
+    if (!validCard) {
+      Serial.print("READER 2: INVALID card read, ");
+      Serial.println(wg2.getCode(), HEX);
+    }
   }
+
 }

@@ -8,6 +8,8 @@
     #define INTERRUPT_ATTR
 #endif
 
+const int IDLE_WIEGAND_READER_MS = 50;
+
 volatile unsigned long WIEGAND::_cardTempHigh=0;
 volatile unsigned long WIEGAND::_cardTemp=0;
 volatile unsigned long WIEGAND::_lastWiegand=0;
@@ -108,8 +110,10 @@ unsigned long WIEGAND::GetCardId (volatile unsigned long *codehigh, volatile uns
 		return *codehigh | *codelow;
 	}
 
+        // Assuming Wiegand 32 bits DO NOT have leading/trailing parity bits
 	if (bitlength==32) {
-		return (*codelow & 0x7FFFFFFE ) >>1;
+          return (*codelow);
+	  // return (*codelow & 0xFFFFFFFF ) >>1;
 	}
 
 	return *codelow;								// EM tag or Mifare without parity bits
@@ -133,7 +137,7 @@ bool WIEGAND::DoWiegandConversion ()
 	unsigned long cardID;
 	unsigned long sysTick = millis();
 	
-	if ((sysTick - _lastWiegand) > 25)								// if no more signal coming through after 25ms
+	if ((sysTick - _lastWiegand) > IDLE_WIEGAND_READER_MS)								// if no more signal coming through after 25ms
 	{
 		if ((_bitCount==24) || (_bitCount==26) || (_bitCount==32) || (_bitCount==34) || (_bitCount==8) || (_bitCount==4)) 	// bitCount for keypress=4 or 8, Wiegand 26=24 or 26, Wiegand 34=32 or 34
 		{
@@ -192,7 +196,7 @@ bool WIEGAND::DoWiegandConversion ()
 		}
 		else
 		{
-			// well time over 25 ms and bitCount !=8 , !=26, !=34 , must be noise or nothing then.
+			// well time over IDLE_WIEGAND_READER_MS ms and bitCount !=8 , !=26, !=34 , must be noise or nothing then.
 			_lastWiegand=sysTick;
 			_bitCount=0;			
 			_cardTemp=0;
