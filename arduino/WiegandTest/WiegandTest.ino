@@ -4,8 +4,8 @@
 const int DOOR_LOCK = 10;
 const int DOOR_LOCK_DELAY = 2000;
 // Door lock shall always be active. NC relay output to be used.
-const int ACTIVE   = 1;
-const int INACTIVE = 0;
+const int ACTIVE   = 0;
+const int INACTIVE = 1;
 
 // Wiegand input configuration
 const int W1_D0 = 2;
